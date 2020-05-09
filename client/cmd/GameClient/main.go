@@ -1,38 +1,33 @@
 package main
 
 import (
-	"encoding/gob"
 	"fmt"
-	"net"
 	"os"
 
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/network"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
 )
 
+var response int
+
 func main() {
-	player := models.NewPlayer("Adrianhh")
+	fmt.Println("Starting client...")
 
-	service := "0.0.0.0:1200"
-
-	conn, err := net.Dial("tcp", service)
-	checkError(err)
-
-	encoder := gob.NewEncoder(conn)
-	decoder := gob.NewDecoder(conn)
-
-	encoder.Encode(player)
-
-	var newPlayer models.Player
-	decoder.Decode(&newPlayer)
-
-	fmt.Println(newPlayer.Exp)
-
-	fmt.Scanln()
-}
-
-func checkError(err error) {
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
-		os.Exit(1)
+	for {
+		fmt.Println("1 - Message Server | 2 - Exit")
+		if _, err := fmt.Scan(&response); err == nil {
+			switch response {
+			case 1:
+				msg, err := network.MessageServer(models.NewMessage(models.AUTHENTICATION, "adrianhh\nfjellhomse123", models.NEUTRAL))
+				if err != nil {
+					fmt.Println(err.Error())
+				}
+				fmt.Println(msg.Message)
+			case 2:
+				os.Exit(0)
+			default:
+				fmt.Println("Can't understand")
+			}
+		}
 	}
 }
