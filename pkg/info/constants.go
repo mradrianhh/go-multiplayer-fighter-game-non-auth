@@ -1,7 +1,0 @@
-package info
-
-// Game states
-const (
-	AUTHENTICATED   = "AUTHENTICATED"
-	UNAUTHENTICATED = "UNAUTHENTICATED"
-)

@@ -9,13 +9,14 @@ import (
 	"strings"
 
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 )
 
 var users map[string]string
 
 func init() {
 	users = make(map[string]string)
-	users["adrianhh"] = "fjellhomse123"
+	users["username"] = "password"
 }
 
 func main() {
@@ -44,32 +45,51 @@ func main() {
 
 func handleMessage(message models.Message, conn net.Conn) error {
 	switch message.MessageType {
-	case models.AUTHENTICATION:
+	case vars.AUTHENTICATION:
 		strs := strings.Split(message.Message, "\n")
 		if len(strs) != 2 {
 			return errors.New("can't process message according to type. 'Authentication'-message should only contain 2 strings")
 		}
+
 		providedUsername := strs[0]
 		providedPassword := strs[1]
-		response, err := authenticate(providedUsername, providedPassword)
-		sendMessage(models.NewMessage(models.CONFIRMATION, string(response), models.ACCEPTED), conn)
+		responseCode, err := authenticate(providedUsername, providedPassword)
+		sendMessage(models.NewMessage(vars.CONFIRMATION, string(responseCode), responseCode), conn)
 		return err
-	case models.EVENT:
+	case vars.REGISTRATION:
+		strs := strings.Split(message.Message, "\n")
+		if len(strs) != 2 {
+			return errors.New("can't process message according to type. 'Registration'-message should only contain 2 strings")
+		}
+
+		username := strs[0]
+		password := strs[1]
+
+		responseCode, err := registrate(username, password)
+		sendMessage(models.NewMessage(vars.CONFIRMATION, string(responseCode), responseCode), conn)
+		return err
+	case vars.EVENT:
 		return nil
 	default:
 		return errors.New("unknown message type")
 	}
 }
 
-func authenticate(providedUsername, providedPassword string) (models.ResponseCode, error) {
+func authenticate(providedUsername, providedPassword string) (vars.ResponseCode, error) {
 	password := users[providedUsername]
 	if password == "" {
-		return models.NOTACCEPTED, errors.New("wrong username")
+		return vars.NOTACCEPTED, errors.New("wrong username")
 	} else if password != providedPassword {
-		return models.NOTACCEPTED, errors.New("wrong password")
+		return vars.NOTACCEPTED, errors.New("wrong password")
 	} else {
-		return models.ACCEPTED, nil
+		return vars.ACCEPTED, nil
 	}
+}
+
+func registrate(username, password string) (vars.ResponseCode, error) {
+	users[username] = password
+
+	return vars.SUCCEEDED, nil
 }
 
 func sendMessage(message models.Message, conn net.Conn) {

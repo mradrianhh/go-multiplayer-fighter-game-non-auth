@@ -1,36 +1,18 @@
 package models
 
-// MessageType is a string representation of the type of message. I.E "AUTHENTICATION", "CONFIRMATION", etc.
-type MessageType string
-
-// Message types.
-const (
-	CONFIRMATION   = "CONFIRMATION"
-	AUTHENTICATION = "AUTHENTICATION"
-	EVENT          = "EVENT"
-)
-
-// ResponseCode ...
-type ResponseCode string
-
-// Response codes
-const (
-	ACCEPTED    = "ACCEPTED"
-	NOTACCEPTED = "NOT ACCEPTED"
-	NEUTRAL     = "NEUTRAL"
-)
+import "github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 
 // Message represents the object being passed between server and client.
 type Message struct {
-	MessageType  MessageType
+	MessageType  vars.MessageType
 	Message      string
-	ResponseCode ResponseCode
+	ResponseCode vars.ResponseCode
 }
 
 // NewMessage returns a new message-instance.
-func NewMessage(messageType MessageType, message string, responseCode ResponseCode) Message {
+func NewMessage(messageType vars.MessageType, message string, responseCode vars.ResponseCode) Message {
 	return Message{MessageType: messageType, Message: message, ResponseCode: responseCode}
 }
 
 // ErrorMessage is the default message when something goes wrong.
-var ErrorMessage = Message{MessageType: CONFIRMATION, Message: "error", ResponseCode: NOTACCEPTED}
+var ErrorMessage = Message{MessageType: vars.CONFIRMATION, Message: "error", ResponseCode: vars.NOTACCEPTED}
