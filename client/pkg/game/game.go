@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/navigation"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/navigation"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 )
 
-var state vars.State
+var state models.State
 
 func init() {
-	state = vars.HOME
+	state.State = vars.Home
 }
 
 // StartGame initializes the game.
@@ -22,17 +23,17 @@ func StartGame() {
 // Loop is the gameloop.
 func Loop() {
 	for {
-		switch state {
-		case vars.MAIN:
+		switch state.State {
+		case vars.Main:
 			err := navigation.RemoveScreensAndPush(&state, navigation.Screens["MAINMENU"])
 			checkError(err)
-		case vars.LOGIN:
+		case vars.Login:
 			err := navigation.RemoveScreensAndPush(&state, navigation.Screens["LOGIN"])
 			checkError(err)
-		case vars.REGISTER:
+		case vars.Register:
 			err := navigation.RemoveScreensAndPush(&state, navigation.Screens["REGISTER"])
 			checkError(err)
-		case vars.HOME:
+		case vars.Home:
 			err := navigation.RemoveScreensAndPush(&state, navigation.Screens["HOME"])
 			checkError(err)
 		}

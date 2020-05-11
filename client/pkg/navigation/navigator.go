@@ -1,8 +1,8 @@
 package navigation
 
 import (
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/screens"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/screens"
 )
 
 var navigationStack Stack
@@ -24,21 +24,21 @@ func init() {
 }
 
 // PushScreen adds a new screen to the navigation-stack.
-func PushScreen(state *vars.State, screen Screen) error {
+func PushScreen(state *models.State, screen Screen) error {
 	navigationStack.Push(screen)
 	err := display(state, false)
 	return err
 }
 
 // PopScreen removes the top screen.
-func PopScreen(state *vars.State) error {
+func PopScreen(state *models.State) error {
 	navigationStack.Pop()
 	err := display(state, false)
 	return err
 }
 
 // PopAndPushScreen removes the topscreen, adds a new screen, and displays it.
-func PopAndPushScreen(state *vars.State, screen Screen) error {
+func PopAndPushScreen(state *models.State, screen Screen) error {
 	err := PopScreen(state)
 	if err != nil {
 		return err
@@ -51,7 +51,7 @@ func PopAndPushScreen(state *vars.State, screen Screen) error {
 }
 
 // RemoveScreens clears the navigation stack.
-func RemoveScreens(state *vars.State) error {
+func RemoveScreens(state *models.State) error {
 	for i := 0; i < navigationStack.Len(); i++ {
 		_, err := navigationStack.Pop()
 		if err != nil {
@@ -62,7 +62,7 @@ func RemoveScreens(state *vars.State) error {
 }
 
 // RemoveScreensAndPush clears the navigation stack and pushes the screen specified.
-func RemoveScreensAndPush(state *vars.State, screen Screen) error {
+func RemoveScreensAndPush(state *models.State, screen Screen) error {
 	for i := 0; i < navigationStack.Len(); i++ {
 		_, err := navigationStack.Pop()
 		if err != nil {
@@ -75,7 +75,7 @@ func RemoveScreensAndPush(state *vars.State, screen Screen) error {
 	return err
 }
 
-func display(state *vars.State, clear bool) error {
+func display(state *models.State, clear bool) error {
 	screen, err := navigationStack.Peek()
 	if err != nil {
 		return err

@@ -3,8 +3,8 @@ package screens
 import (
 	"fmt"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/network"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/network"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 )
 
@@ -14,7 +14,7 @@ type Login struct {
 }
 
 // Show presents the login screen to the user.
-func (login Login) Show(state *vars.State) error {
+func (login Login) Show(state *models.State) error {
 	username := ""
 	password := ""
 	fmt.Print("Enter username: ")
@@ -26,16 +26,16 @@ func (login Login) Show(state *vars.State) error {
 		return err
 	}
 
-	response, err := network.MessageServer(models.NewMessage(vars.AUTHENTICATION, username+"\n"+password, vars.NEUTRAL))
+	response, err := network.MessageServer(models.NewMessage(vars.Authentication, username+"\n"+password))
 	if err != nil {
 		return err
 	}
 
-	fmt.Println(response.ResponseCode)
-	if response.ResponseCode == vars.ACCEPTED {
-		*state = vars.MAIN
+	if response.ResponseCode == vars.Accepted {
+		state.Token = response.Token
+		state.State = vars.Main
 	} else {
-		*state = vars.LOGIN
+		state.State = vars.Login
 	}
 	return nil
 }

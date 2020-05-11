@@ -11,6 +11,9 @@ type Player struct {
 	Exp      int
 }
 
+// NilPlayer is the empty player value.
+var NilPlayer = Player{}
+
 // NewPlayer works as a constructor, creating a new Player-object with the specified username attribute.
 func NewPlayer(username string, online bool, password string) Player {
 	return Player{Username: username, Exp: 0, Online: online, Password: password}

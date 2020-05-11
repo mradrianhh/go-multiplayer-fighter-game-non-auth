@@ -6,7 +6,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
 )
 
 const (
