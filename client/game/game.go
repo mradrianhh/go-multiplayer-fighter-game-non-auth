@@ -24,16 +24,16 @@ func Loop() {
 	for {
 		switch state {
 		case vars.MAIN:
-			err := navigation.Screens["MAINMENU"].Show(&state)
+			err := navigation.RemoveScreensAndPush(&state, navigation.Screens["MAINMENU"])
 			checkError(err)
 		case vars.LOGIN:
-			err := navigation.Screens["LOGIN"].Show(&state)
+			err := navigation.RemoveScreensAndPush(&state, navigation.Screens["LOGIN"])
 			checkError(err)
 		case vars.REGISTER:
-			err := navigation.Screens["REGISTER"].Show(&state)
+			err := navigation.RemoveScreensAndPush(&state, navigation.Screens["REGISTER"])
 			checkError(err)
 		case vars.HOME:
-			err := navigation.Screens["HOME"].Show(&state)
+			err := navigation.RemoveScreensAndPush(&state, navigation.Screens["HOME"])
 			checkError(err)
 		}
 	}

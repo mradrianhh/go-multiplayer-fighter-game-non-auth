@@ -26,23 +26,20 @@ func init() {
 // PushScreen adds a new screen to the navigation-stack.
 func PushScreen(state *vars.State, screen Screen) error {
 	navigationStack.Push(screen)
-	err := display(state)
+	err := display(state, false)
 	return err
 }
 
-// PopScreen removes the top screen. If displayPrev is true, it will also reveal the now-topmost screen.
-func PopScreen(state *vars.State, displayPrev bool) error {
+// PopScreen removes the top screen.
+func PopScreen(state *vars.State) error {
 	navigationStack.Pop()
-	if displayPrev {
-		err := display(state)
-		return err
-	}
-	return nil
+	err := display(state, false)
+	return err
 }
 
 // PopAndPushScreen removes the topscreen, adds a new screen, and displays it.
 func PopAndPushScreen(state *vars.State, screen Screen) error {
-	err := PopScreen(state, false)
+	err := PopScreen(state)
 	if err != nil {
 		return err
 	}
@@ -53,24 +50,10 @@ func PopAndPushScreen(state *vars.State, screen Screen) error {
 	return nil
 }
 
-func display(state *vars.State) error {
-	screen, err := navigationStack.Peek()
-	if err != nil {
-		return err
-	}
-
-	Clear()
-	err = screen.Show(state)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 // RemoveScreens clears the navigation stack.
 func RemoveScreens(state *vars.State) error {
 	for i := 0; i < navigationStack.Len(); i++ {
-		err := PopScreen(state, false)
+		_, err := navigationStack.Pop()
 		if err != nil {
 			return err
 		}
@@ -81,12 +64,26 @@ func RemoveScreens(state *vars.State) error {
 // RemoveScreensAndPush clears the navigation stack and pushes the screen specified.
 func RemoveScreensAndPush(state *vars.State, screen Screen) error {
 	for i := 0; i < navigationStack.Len(); i++ {
-		err := PopScreen(state, false)
+		_, err := navigationStack.Pop()
 		if err != nil {
 			return err
 		}
 	}
 
-	err := PushScreen(state, screen)
+	navigationStack.Push(screen)
+	err := display(state, true)
 	return err
+}
+
+func display(state *vars.State, clear bool) error {
+	screen, err := navigationStack.Peek()
+	if err != nil {
+		return err
+	}
+
+	if clear {
+		Clear()
+	}
+
+	return screen.Show(state)
 }

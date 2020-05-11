@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"time"
 )
 
 var clear map[string]func()
@@ -26,7 +27,9 @@ func init() {
 func Clear() {
 	value, ok := clear[runtime.GOOS]
 	if ok {
+		time.Sleep(100 * time.Millisecond)
 		value()
+		time.Sleep(100 * time.Millisecond)
 	} else {
 		panic("Platform is unsupported.")
 	}
