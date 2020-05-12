@@ -8,7 +8,6 @@ import (
 var response int
 
 func main() {
-	go network.Listen()
-
+	network.Run()
 	program.Run()
 }

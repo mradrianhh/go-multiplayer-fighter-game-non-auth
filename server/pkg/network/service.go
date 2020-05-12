@@ -11,6 +11,11 @@ import (
 	"github.com/mradrianhh/go-multiplayer-fighter-game/server/pkg/models"
 )
 
+const (
+	service = "0.0.0.0:1200"
+	network = "tcp"
+)
+
 var playerDatabase map[string]models.Player
 
 // Players holds all the players connected to the session.
@@ -36,13 +41,16 @@ func init() {
 	playerDatabase["username"] = models.NewPlayer("username", "password")
 }
 
-// Listen opens a connection that listens for messages from a client.
-func Listen() {
-	service := "0.0.0.0:1200"
-	tcpAddr, err := net.ResolveTCPAddr("tcp", service)
+// Run starts the service.
+func Run() {
+	go listen()
+}
+
+func listen() {
+	tcpAddr, err := net.ResolveTCPAddr(network, service)
 	checkError(err)
 
-	listener, err := net.ListenTCP("tcp", tcpAddr)
+	listener, err := net.ListenTCP(network, tcpAddr)
 	checkError(err)
 
 	for {

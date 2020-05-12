@@ -14,9 +14,14 @@ const (
 	network = "tcp"
 )
 
+// Run starts the service.
+func Run() {
+	go listen()
+}
+
 // MessageServer sends a message to the server and returns the response.
 func MessageServer(message models.Message) (models.Message, error) {
-	conn, err := net.Dial("tcp", service)
+	conn, err := net.Dial(network, service)
 	if err != nil {
 		return models.ErrorMessage, err
 	}
@@ -28,6 +33,30 @@ func MessageServer(message models.Message) (models.Message, error) {
 	decoder := gob.NewDecoder(conn)
 	decoder.Decode(&response)
 	return response, nil
+}
+
+func listen() {
+	tcpAddr, err := net.ResolveTCPAddr(network, service)
+	if err != nil {
+		panic(err)
+	}
+
+	listener, err := net.ListenTCP(network, tcpAddr)
+	if err != nil {
+		panic(err)
+	}
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			continue
+		}
+
+		decoder := gob.NewDecoder(conn)
+		var message models.Message
+		decoder.Decode(&message)
+		fmt.Println(message.MessageType)
+	}
 }
 
 func checkError(err error) {

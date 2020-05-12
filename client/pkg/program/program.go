@@ -15,8 +15,8 @@ func init() {
 	state.State = vars.Home
 }
 
-// StartGame initializes the game.
-func StartGame() {
+// Run initializes the game.
+func Run() {
 	Loop()
 }
 
