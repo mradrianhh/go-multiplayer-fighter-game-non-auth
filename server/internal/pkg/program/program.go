@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/server/pkg/network"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/server/internal/pkg/network"
 )
 
 var response int
@@ -17,7 +17,7 @@ func Run() {
 // ShowMainMenu presents the user with the main-menu.
 func ShowMainMenu() {
 	for {
-		fmt.Println("\nMain Menu\n\n1 - View all messages\n2 - View log\n3 - View all errors\n4 - View players\n5 - View connections\n0 - Exit")
+		fmt.Println("\nMain Menu\n\n1 - View all messages\n2 - View log\n3 - View all errors\n4 - View players\n5 - View connections\n6 - View authenticated connections\n0 - Exit")
 		if _, err := fmt.Scan(&response); err == nil {
 			switch response {
 			case 1:
@@ -30,6 +30,8 @@ func ShowMainMenu() {
 				ShowPlayers()
 			case 5:
 				ShowConnections()
+			case 6:
+				ShowAuthenticatedConnections()
 			case 0:
 				Clear()
 				os.Exit(0)
@@ -103,7 +105,23 @@ func ShowConnections() {
 
 	if len(network.Conns) > 0 {
 		index := 1
-		for key, value := range network.Conns {
+		for _, conn := range network.Conns {
+			fmt.Printf("%v. %s.\n", index, conn.LocalAddr().String())
+			index++
+		}
+	} else {
+		fmt.Println("No connections to show.")
+	}
+}
+
+// ShowAuthenticatedConnections presents the user with a list of all the authenticated connections to the server.
+func ShowAuthenticatedConnections() {
+	Clear()
+	fmt.Print("Authenticated connections\n\n")
+
+	if len(network.AuthenticatedConns) > 0 {
+		index := 1
+		for key, value := range network.AuthenticatedConns {
 			fmt.Printf("%v. %s - %s.\n", index, key, value.LocalAddr().String())
 			index++
 		}

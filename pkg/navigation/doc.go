@@ -1,7 +1,7 @@
-// Package navigation maintains and handles the screens in the game.
+// Package navigation orchestrates the user interface.
 //
 // Declarations:
-// 	- Throughout this engine, the word "screen" will be  used for the collection of text which is presented
+// 	- Throughout this documentation, the word "screen" will be  used for the collection of text which is presented
 // 		at the same time and concerns the same aspect of the game.
 // 		I.e: the main-menu screen may write "1 - Start Game | 2 - Exit Game" to the console, and then wait for the user to respond.
 //	 	This - including the user's response - is considered a screen.

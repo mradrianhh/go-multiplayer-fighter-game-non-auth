@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 )
+
+var home = Home{Identifier: "HOME"}
 
 // Home ..
 type Home struct {
@@ -35,4 +37,9 @@ func (home Home) Show(state *models.State) error {
 		fmt.Println("Sorry, I can't understand...")
 	}
 	return nil
+}
+
+// GetHome returns the home screen.
+func GetHome() *Home {
+	return &home
 }

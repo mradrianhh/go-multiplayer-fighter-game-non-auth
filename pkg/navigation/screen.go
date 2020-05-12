@@ -1,6 +1,6 @@
 package navigation
 
-import "github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
+import "github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
 
 // Screen ...
 type Screen interface {

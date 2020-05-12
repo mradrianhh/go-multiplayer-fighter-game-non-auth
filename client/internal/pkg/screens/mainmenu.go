@@ -3,10 +3,13 @@ package screens
 import (
 	"fmt"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/network"
+	imodels "github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/network"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 )
+
+var mainmenu = MainMenu{Identifier: "MAINMENU"}
 
 // MainMenu represents the main menu.
 type MainMenu struct {
@@ -28,7 +31,7 @@ func (mainMenu MainMenu) Show(state *models.State) error {
 		fmt.Println("Starting game...")
 		state.State = vars.Home
 	case 2:
-		response, err := network.MessageServer(models.NewAuthenticatedMessage(vars.Event, vars.LoggedOut, state.Token))
+		response, err := network.MessageServer(imodels.NewAuthenticatedMessage(vars.Event, vars.LoggedOut, state.Token))
 		if err != nil {
 			state.State = vars.Main
 			fmt.Println("Can't log out, error encountered. Try again.")
@@ -44,4 +47,9 @@ func (mainMenu MainMenu) Show(state *models.State) error {
 		fmt.Println("Sorry, I can't understand...")
 	}
 	return nil
+}
+
+// GetMainMenu returns the main-menu screen.
+func GetMainMenu() *MainMenu {
+	return &mainmenu
 }

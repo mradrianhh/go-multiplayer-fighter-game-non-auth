@@ -3,10 +3,13 @@ package screens
 import (
 	"fmt"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/network"
+	imodels "github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/network"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 )
+
+var login = Login{Identifier: "LOGIN"}
 
 // Login ..
 type Login struct {
@@ -26,7 +29,7 @@ func (login Login) Show(state *models.State) error {
 		return err
 	}
 
-	response, err := network.MessageServer(models.NewMessage(vars.Authentication, username+"\n"+password))
+	response, err := network.MessageServer(imodels.NewMessage(vars.Authentication, username+"\n"+password))
 	if err != nil {
 		return err
 	}
@@ -38,4 +41,9 @@ func (login Login) Show(state *models.State) error {
 		state.State = vars.Login
 	}
 	return nil
+}
+
+// GetLogin returns the login screen.
+func GetLogin() *Login {
+	return &login
 }

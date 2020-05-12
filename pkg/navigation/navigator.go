@@ -1,26 +1,15 @@
 package navigation
 
-import (
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/screens"
-)
+import "github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
 
 var navigationStack Stack
 
 // Screens is a key-value collection of the screens registered.
+// Add values to the map by assigning a screen with the screen's identifier as the key.
 var Screens map[string]Screen
 
 func init() {
-	mainmenu := screens.MainMenu{Identifier: "MAINMENU"}
-	home := screens.Home{Identifier: "HOME"}
-	login := screens.Login{Identifier: "LOGIN"}
-	register := screens.Register{Identifier: "REGISTER"}
-
 	Screens = make(map[string]Screen)
-	Screens[mainmenu.Identifier] = mainmenu
-	Screens[home.Identifier] = home
-	Screens[login.Identifier] = login
-	Screens[register.Identifier] = register
 }
 
 // PushScreen adds a new screen to the navigation-stack.

@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/server/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/server/internal/pkg/models"
 )
 
 const (
@@ -31,12 +31,15 @@ var Log []string
 var ErrorLog []error
 
 // Conns holds a record of all the connections.
-var Conns map[string]net.Conn
+var Conns []net.Conn
+
+// AuthenticatedConns holds a record of all the connections that are authenticated through login.
+var AuthenticatedConns map[string]net.Conn
 
 func init() {
 	playerDatabase = make(map[string]models.Player)
 	Players = make(map[string]models.Player)
-	Conns = make(map[string]net.Conn)
+	AuthenticatedConns = make(map[string]net.Conn)
 
 	playerDatabase["username"] = models.NewPlayer("username", "password")
 }
@@ -59,6 +62,8 @@ func listen() {
 			addError(err)
 			continue // if there is an error creating a connection, we'll move on and let the client deal with it. They can retry.
 		}
+
+		Conns = append(Conns, conn)
 
 		decoder := gob.NewDecoder(conn)
 		var message models.Message
@@ -95,7 +100,7 @@ func handleAuthentication(message models.Message, conn net.Conn) error {
 	providedPassword := strs[1]
 	message, err := authenticate(providedUsername, providedPassword)
 	if err == nil {
-		Conns[providedUsername] = conn // if the  user gets authenticated, it means he's logged in with "providedUsername", in which case we add his conn to the list.
+		AuthenticatedConns[providedUsername] = conn // if the  user gets authenticated, it means he's logged in with "providedUsername", in which case we add his conn to the list.
 		sendMessage(message, conn)
 		return nil
 	}
@@ -152,6 +157,7 @@ func handleEvent(message models.Message, conn net.Conn) error {
 	switch message.Message {
 	case vars.LoggedOut:
 		delete(Players, message.Token)
+		delete(AuthenticatedConns, message.Token)
 		sendMessage(msgAccepted, conn)
 		return nil
 	default:

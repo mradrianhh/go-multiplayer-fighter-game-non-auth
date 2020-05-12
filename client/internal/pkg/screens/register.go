@@ -3,10 +3,13 @@ package screens
 import (
 	"fmt"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/models"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/client/pkg/network"
+	imodels "github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/network"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 )
+
+var register = Register{Identifier: "REGISTER"}
 
 // Register ..
 type Register struct {
@@ -26,7 +29,7 @@ func (register Register) Show(state *models.State) error {
 		return err
 	}
 
-	response, err := network.MessageServer(models.NewMessage(vars.Registration, username+"\n"+password))
+	response, err := network.MessageServer(imodels.NewMessage(vars.Registration, username+"\n"+password))
 	if err != nil {
 		return err
 	}
@@ -37,4 +40,9 @@ func (register Register) Show(state *models.State) error {
 		state.State = vars.Register
 	}
 	return nil
+}
+
+// GetRegister returns the register screen.
+func GetRegister() *Register {
+	return &register
 }
