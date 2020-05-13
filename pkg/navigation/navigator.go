@@ -2,37 +2,40 @@ package navigation
 
 import "github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/models"
 
-var navigationStack Stack
+// Navigator holds a stack, and a map of screens to use in the stack. Through it's method, one may manipulate the stack, hence altering the appearance of the screen.
+type Navigator struct {
+	stack   Stack
+	screens map[string]Screen
+}
 
-// Screens is a key-value collection of the screens registered.
-// Add values to the map by assigning a screen with the screen's identifier as the key.
-var Screens map[string]Screen
-
-func init() {
-	Screens = make(map[string]Screen)
+// NewNavigator returns a new Navigator-instance with default settings.
+func NewNavigator() Navigator {
+	var navigator Navigator
+	navigator.screens = make(map[string]Screen)
+	return navigator
 }
 
 // PushScreen adds a new screen to the navigation-stack.
-func PushScreen(state *models.State, screen Screen) error {
-	navigationStack.Push(screen)
-	err := display(state, false)
+func (navigator *Navigator) PushScreen(state *models.State, identifier string) error {
+	navigator.stack.Push(navigator.screens[identifier])
+	err := navigator.display(state, false)
 	return err
 }
 
 // PopScreen removes the top screen.
-func PopScreen(state *models.State) error {
-	navigationStack.Pop()
-	err := display(state, false)
+func (navigator *Navigator) PopScreen(state *models.State) error {
+	navigator.stack.Pop()
+	err := navigator.display(state, false)
 	return err
 }
 
 // PopAndPushScreen removes the topscreen, adds a new screen, and displays it.
-func PopAndPushScreen(state *models.State, screen Screen) error {
-	err := PopScreen(state)
+func (navigator *Navigator) PopAndPushScreen(state *models.State, identifier string) error {
+	err := navigator.PopScreen(state)
 	if err != nil {
 		return err
 	}
-	err = PushScreen(state, screen)
+	err = navigator.PushScreen(state, identifier)
 	if err != nil {
 		return err
 	}
@@ -40,9 +43,9 @@ func PopAndPushScreen(state *models.State, screen Screen) error {
 }
 
 // RemoveScreens clears the navigation stack.
-func RemoveScreens(state *models.State) error {
-	for i := 0; i < navigationStack.Len(); i++ {
-		_, err := navigationStack.Pop()
+func (navigator *Navigator) RemoveScreens(state *models.State) error {
+	for i := 0; i < navigator.stack.Len(); i++ {
+		_, err := navigator.stack.Pop()
 		if err != nil {
 			return err
 		}
@@ -51,21 +54,26 @@ func RemoveScreens(state *models.State) error {
 }
 
 // RemoveScreensAndPush clears the navigation stack and pushes the screen specified.
-func RemoveScreensAndPush(state *models.State, screen Screen) error {
-	for i := 0; i < navigationStack.Len(); i++ {
-		_, err := navigationStack.Pop()
+func (navigator *Navigator) RemoveScreensAndPush(state *models.State, identifier string) error {
+	for i := 0; i < navigator.stack.Len(); i++ {
+		_, err := navigator.stack.Pop()
 		if err != nil {
 			return err
 		}
 	}
 
-	navigationStack.Push(screen)
-	err := display(state, true)
+	navigator.stack.Push(navigator.screens[identifier])
+	err := navigator.display(state, true)
 	return err
 }
 
-func display(state *models.State, clear bool) error {
-	screen, err := navigationStack.Peek()
+// AddScreen assigns a new screen to the map with it's identifier as the key.
+func (navigator *Navigator) AddScreen(identifier string, screen Screen) {
+	navigator.screens[identifier] = screen
+}
+
+func (navigator *Navigator) display(state *models.State, clear bool) error {
+	screen, err := navigator.stack.Peek()
 	if err != nil {
 		return err
 	}
