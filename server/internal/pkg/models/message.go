@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/vars"
 )
 
 // Message represents the object being passed between server and client.

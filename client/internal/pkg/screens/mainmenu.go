@@ -3,10 +3,10 @@ package screens
 import (
 	"fmt"
 
-	imodels "github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/models"
+	cmodels "github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/models"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/client/internal/pkg/network"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/vars"
 )
 
 var mainmenu = MainMenu{Identifier: "MAINMENU"}
@@ -31,7 +31,7 @@ func (mainMenu MainMenu) Show(state *models.State) error {
 		fmt.Println("Starting game...")
 		state.State = vars.Home
 	case 2:
-		response, err := network.MessageServer(imodels.NewAuthenticatedMessage(vars.Event, vars.LoggedOut, state.Token))
+		response, err := network.MessageServer(cmodels.NewAuthenticatedMessage(vars.Event, vars.LoggedOut, state.Token))
 		if err != nil {
 			state.State = vars.Main
 			fmt.Println("Can't log out, error encountered. Try again.")

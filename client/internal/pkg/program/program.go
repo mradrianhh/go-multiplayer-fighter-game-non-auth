@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/vars"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/navigation"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
 )
 
 var state models.State

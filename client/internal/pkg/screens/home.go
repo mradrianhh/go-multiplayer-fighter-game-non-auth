@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/models"
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/models"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/vars"
 )
 
 var home = Home{Identifier: "HOME"}

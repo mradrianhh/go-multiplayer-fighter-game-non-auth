@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mradrianhh/go-multiplayer-fighter-game/pkg/vars"
+	"github.com/mradrianhh/go-multiplayer-fighter-game/internal/pkg/vars"
 	"github.com/mradrianhh/go-multiplayer-fighter-game/server/internal/pkg/models"
 )
 
